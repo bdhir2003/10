@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Long Filename Loading</title>
+</head>
+<body>
+    <h1>Testing Netlify CMS Long Filename</h1>
+    <div id="test-results"></div>
+    <div id="education-content"></div>
+
+    <script>
+        async function testLongFilename() {
+            const resultsDiv = document.getElementById('test-results');
+            const contentDiv = document.getElementById('education-content');
+            
+            // The exact filename from Netlify CMS
+            const filename = 'map-startdate-wed-jul-30-2025-04-29-38-gmt-0500-central-daylight-time-enddate-wed-jul-30-2025-04-29-38-gmt-0500-central-daylight-time-degree-vwwwevwevvvrr-institution-vwveevevve2v-description-e_vveveevveevweve.md';
+            
+            try {
+                resultsDiv.innerHTML = '<p>🔄 Testing file loading...</p>';
+                
+                // Test 1: Try to fetch the file
+                const response = await fetch(`./content/education/${filename}`);
+                
+                if (response.ok) {
+                    const content = await response.text();
+                    resultsDiv.innerHTML += '<p>✅ File fetch successful!</p>';
+                    
+                    // Test 2: Try to parse the frontmatter
+                    const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+                    if (frontmatterMatch) {
+                        resultsDiv.innerHTML += '<p>✅ Frontmatter parsing successful!</p>';
+                        
+                        // Test 3: Display the content
+                        const frontmatterText = frontmatterMatch[1];
+                        resultsDiv.innerHTML += '<p>✅ Content extraction successful!</p>';
+                        
+                        contentDiv.innerHTML = `
+                            <h3>File Content:</h3>
+                            <pre>${content}</pre>
+                            <h3>Frontmatter:</h3>
+                            <pre>${frontmatterText}</pre>
+                        `;
+                        
+                        resultsDiv.innerHTML += '<p><strong>🎉 SUCCESS: Our system can handle long Netlify CMS filenames!</strong></p>';
+                    } else {
+                        resultsDiv.innerHTML += '<p>❌ Frontmatter parsing failed</p>';
+                    }
+                } else {
+                    resultsDiv.innerHTML += `<p>❌ File fetch failed: ${response.status}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Run the test when page loads
+        document.addEventListener('DOMContentLoaded', testLongFilename);
+    </script>
+</body>
+</html>

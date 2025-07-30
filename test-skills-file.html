@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Skills File Loading</title>
+</head>
+<body>
+    <h1>Testing Netlify CMS Skills File</h1>
+    <div id="test-results"></div>
+    <div id="skills-content"></div>
+
+    <script>
+        async function testSkillsFile() {
+            const resultsDiv = document.getElementById('test-results');
+            const contentDiv = document.getElementById('skills-content');
+            
+            // The skills filename from Netlify CMS
+            const filename = 'map-name-crcrcrcececr.md';
+            
+            try {
+                resultsDiv.innerHTML = '<p>🔄 Testing skills file loading...</p>';
+                
+                // Test 1: Try to fetch the file
+                const response = await fetch(`./content/skills/${filename}`);
+                
+                if (response.ok) {
+                    const content = await response.text();
+                    resultsDiv.innerHTML += '<p>✅ Skills file fetch successful!</p>';
+                    
+                    // Test 2: Parse frontmatter like our real loader does
+                    function parseMarkdownFrontmatter(markdownText) {
+                        const frontmatterMatch = markdownText.match(/^---\s*\n([\s\S]*?)\n---/);
+                        if (!frontmatterMatch) return {};
+                        
+                        const frontmatterText = frontmatterMatch[1];
+                        const data = {};
+                        
+                        // Simple YAML parsing
+                        const lines = frontmatterText.split('\n');
+                        for (const line of lines) {
+                            const match = line.match(/^(\w+):\s*(.*)$/);
+                            if (match) {
+                                data[match[1]] = match[2].trim();
+                            }
+                        }
+                        return data;
+                    }
+                    
+                    const skillData = parseMarkdownFrontmatter(content);
+                    
+                    if (skillData.name) {
+                        resultsDiv.innerHTML += '<p>✅ Skills data parsing successful!</p>';
+                        
+                        // Test 3: Render like our real loader does
+                        const skillItem = document.createElement('div');
+                        skillItem.className = 'skill-item';
+                        skillItem.innerHTML = `
+                            <div class="skill-info">
+                                <h3>${skillData.name || 'Skill'}</h3>
+                                <span class="skill-category">${skillData.category || 'No category'}</span>
+                                <div class="skill-level">${skillData.proficiency || 'No proficiency set'}</div>
+                            </div>
+                        `;
+                        
+                        contentDiv.appendChild(skillItem);
+                        
+                        resultsDiv.innerHTML += '<p>✅ Skills rendering successful!</p>';
+                        resultsDiv.innerHTML += '<p><strong>🎉 SUCCESS: Our system can handle Netlify CMS skills files!</strong></p>';
+                        
+                        // Show the parsed data
+                        resultsDiv.innerHTML += `
+                            <div style="background: #f0f0f0; padding: 10px; margin: 10px 0;">
+                                <strong>Parsed Data:</strong><br>
+                                Name: ${skillData.name || 'N/A'}<br>
+                                Category: ${skillData.category || 'N/A'}<br>
+                                Proficiency: ${skillData.proficiency || 'N/A'}
+                            </div>
+                        `;
+                        
+                    } else {
+                        resultsDiv.innerHTML += '<p>❌ Skills data parsing failed - no name found</p>';
+                    }
+                } else {
+                    resultsDiv.innerHTML += `<p>❌ Skills file fetch failed: ${response.status}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Run the test when page loads
+        document.addEventListener('DOMContentLoaded', testSkillsFile);
+    </script>
+    
+    <style>
+        .skill-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .skill-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .skill-category {
+            background: #007bff;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .skill-level {
+            margin-top: 5px;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+</body>
+</html>

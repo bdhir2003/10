@@ -1,0 +1,37 @@
+{
+  "education": [
+    "bachelor-degree.md",
+    "high-school.md",
+    "map-startdate-wed-jul-30-2025-04-29-38-gmt-0500-central-daylight-time-enddate-wed-jul-30-2025-04-29-38-gmt-0500-central-daylight-time-degree-vwwwevwevvvrr-institution-vwveevevve2v-description-e_vveveevveevweve.md",
+    "masters-degree.md",
+    "netlify-cms-test.md",
+    "test-education.md"
+  ],
+  "skills": [
+    "html5.md",
+    "javascript.md",
+    "map-name-crcrcrcececr.md",
+    "nodejs.md",
+    "python.md",
+    "react.md",
+    "test-skills.md"
+  ],
+  "projects": [
+    "ecommerce-platform.md",
+    "portfolio-website.md"
+  ],
+  "publications": [
+    "ml-fairness-healthcare.md",
+    "ml-web-dev.md"
+  ],
+  "podcasts": [
+    "test-podcast.md"
+  ],
+  "videos": [
+    "test-video.md"
+  ],
+  "awards": [
+    "deans-list.md",
+    "innovation-award.md"
+  ]
+}
