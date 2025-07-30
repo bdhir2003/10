@@ -63,7 +63,6 @@
     <div class="container">
       <h2>Education</h2>
       <div class="education-timeline" id="educationList">
-        <!-- Markdown from bcs.md will load here -->
         <p>Loading education content...</p>
       </div>
     </div>
@@ -156,8 +155,6 @@
 
   <!-- Scripts -->
   <script src="script.js"></script>
-  <script src="portfolio-data.js"></script>
-  <script src="netlify-cms-loader.js"></script>
 
   <!-- Load Markdown Education Content -->
   <script>
@@ -166,7 +163,8 @@
     fetch(mdUrl)
       .then(res => res.text())
       .then(md => {
-        const html = marked.parse(md);
+        const cleanedMd = md.replace(/^---[\s\S]*?---/, '').trim();
+        const html = marked.parse(cleanedMd);
         document.getElementById("educationList").innerHTML = html;
       })
       .catch(err => {
